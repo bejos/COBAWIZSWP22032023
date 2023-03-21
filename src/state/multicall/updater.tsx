@@ -30,7 +30,6 @@ async function fetchChunk(
   chunk: Call[],
   minBlockNumber: number
 ): Promise<{ results: string[]; blockNumber: number }> {
-  console.info('Fetching chunk', multicallContract, chunk, minBlockNumber)
   let resultsBlockNumber
   let returnData
   try {
@@ -42,7 +41,6 @@ async function fetchChunk(
     throw error
   }
   if (resultsBlockNumber.toNumber() < minBlockNumber) {
-    console.info(`Fetched results for old block number: ${resultsBlockNumber.toString()} vs. ${minBlockNumber}`)
     throw new RetryableError('Fetched for old block number')
   }
   return { results: returnData, blockNumber: resultsBlockNumber.toNumber() }
@@ -142,7 +140,7 @@ export default function Updater(): null {
     if (outdatedCallKeys.length === 0) return
     const calls = outdatedCallKeys.map((key) => parseCallKey(key))
     // .filter(item => item.address.toLowerCase() !== '0xBCfCcbde45cE874adCB698cC183deBcF17952812'.toLowerCase())
-
+    
     const chunkedCalls = chunkArray(calls, CALL_CHUNK_SIZE)
 
     if (cancellations.current?.blockNumber !== latestBlockNumber) {
@@ -156,6 +154,7 @@ export default function Updater(): null {
         fetchingBlockNumber: latestBlockNumber,
       })
     )
+    console.log(multicallContract)
 
     cancellations.current = {
       blockNumber: latestBlockNumber,
@@ -185,8 +184,6 @@ export default function Updater(): null {
                 blockNumber: fetchBlockNumber,
               })
             )
-
-            console.info('Success to fetch multicall chunk', chunk, chainId)
           })
           .catch((error: any) => {
             if (error instanceof CancelledError) {

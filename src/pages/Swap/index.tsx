@@ -1,7 +1,7 @@
-import { CurrencyAmount, JSBI, Token, Trade } from '@pancakeswap-libs/sdk'
+import { CurrencyAmount, JSBI, Token, Trade } from '@wizswap-libs/sdk'
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { ArrowDown } from 'react-feather'
-import { CardBody, ArrowDownIcon, Button, IconButton, Text } from '@pancakeswap-libs/uikit'
+import { CardBody, ArrowDownIcon, Button, IconButton, Text } from '@wizswap-libs/uikit'
 import { ThemeContext } from 'styled-components'
 import AddressInputPanel from 'components/AddressInputPanel'
 import Card, { GreyCard } from 'components/Card'
@@ -11,7 +11,6 @@ import CurrencyInputPanel from 'components/CurrencyInputPanel'
 import CardNav from 'components/CardNav'
 import { AutoRow, RowBetween } from 'components/Row'
 import AdvancedSwapDetailsDropdown from 'components/swap/AdvancedSwapDetailsDropdown'
-import BetterTradeLink from 'components/swap/BetterTradeLink'
 import confirmPriceImpactWithoutFee from 'components/swap/confirmPriceImpactWithoutFee'
 import { ArrowWrapper, BottomGrouping, SwapCallbackError, Wrapper } from 'components/swap/styleds'
 import TradePrice from 'components/swap/TradePrice'
@@ -19,13 +18,12 @@ import TokenWarningModal from 'components/TokenWarningModal'
 import SyrupWarningModal from 'components/SyrupWarningModal'
 import ProgressSteps from 'components/ProgressSteps'
 
-import { BETTER_TRADE_LINK_THRESHOLD, INITIAL_ALLOWED_SLIPPAGE } from 'constants/index'
-import { isTradeBetter } from 'data/V1'
+import { INITIAL_ALLOWED_SLIPPAGE } from 'constants/index'
+import PANCAKESWAP_DEFAULT_TOKEN_LIST from 'constants/token/wizswap.json'
 import { useActiveWeb3React } from 'hooks'
 import { useCurrency } from 'hooks/Tokens'
 import { ApprovalState, useApproveCallbackFromTrade } from 'hooks/useApproveCallback'
 import { useSwapCallback } from 'hooks/useSwapCallback'
-import useToggledVersion, { Version } from 'hooks/useToggledVersion'
 import useWrapCallback, { WrapType } from 'hooks/useWrapCallback'
 import { Field } from 'state/swap/actions'
 import { useDefaultsFromURLSearch, useDerivedSwapInfo, useSwapActionHandlers, useSwapState } from 'state/swap/hooks'
@@ -56,6 +54,20 @@ const Swap = () => {
     () => [loadedInputCurrency, loadedOutputCurrency]?.filter((c): c is Token => c instanceof Token) ?? [],
     [loadedInputCurrency, loadedOutputCurrency]
   )
+  
+  const tokenWhitelisted: boolean = useMemo(
+    () => {
+      const tokenAddress = loadedUrlParams?.outputCurrencyId?.toLowerCase()
+      if (!tokenAddress) return false
+
+      const foundToken = PANCAKESWAP_DEFAULT_TOKEN_LIST.tokens.find(t => t.address.toLowerCase() === tokenAddress)
+      if (!foundToken) return false
+
+      return true
+    },
+    [loadedUrlParams]
+  )
+  
   const handleConfirmTokenWarning = useCallback(() => {
     setDismissTokenWarning(true)
   }, [])
@@ -76,35 +88,14 @@ const Swap = () => {
 
   // swap state
   const { independentField, typedValue, recipient } = useSwapState()
-  const {
-    v1Trade,
-    v2Trade,
-    currencyBalances,
-    parsedAmount,
-    currencies,
-    inputError: swapInputError,
-  } = useDerivedSwapInfo()
+  const { v2Trade, currencyBalances, parsedAmount, currencies, inputError: swapInputError } = useDerivedSwapInfo()
   const { wrapType, execute: onWrap, inputError: wrapInputError } = useWrapCallback(
     currencies[Field.INPUT],
     currencies[Field.OUTPUT],
     typedValue
   )
   const showWrap: boolean = wrapType !== WrapType.NOT_APPLICABLE
-  //   const { address: recipientAddress } = useENSAddress(recipient)
-  const toggledVersion = useToggledVersion()
-  const trade = showWrap
-    ? undefined
-    : {
-        [Version.v1]: v1Trade,
-        [Version.v2]: v2Trade,
-      }[toggledVersion]
-
-  const betterTradeLinkVersion: Version | undefined =
-    toggledVersion === Version.v2 && isTradeBetter(v2Trade, v1Trade, BETTER_TRADE_LINK_THRESHOLD)
-      ? Version.v1
-      : toggledVersion === Version.v1 && isTradeBetter(v1Trade, v2Trade)
-      ? Version.v2
-      : undefined
+  const trade = v2Trade
 
   const parsedAmounts = showWrap
     ? {
@@ -284,7 +275,7 @@ const Swap = () => {
   return (
     <>
       <TokenWarningModal
-        isOpen={urlLoadedTokens.length > 0 && !dismissTokenWarning}
+        isOpen={urlLoadedTokens.length > 0 && !dismissTokenWarning && !tokenWhitelisted}
         tokens={urlLoadedTokens}
         onConfirm={handleConfirmTokenWarning}
       />
@@ -483,7 +474,6 @@ const Swap = () => {
               )}
               {showApproveFlow && <ProgressSteps steps={[approval === ApprovalState.APPROVED]} />}
               {isExpertMode && swapErrorMessage ? <SwapCallbackError error={swapErrorMessage} /> : null}
-              {betterTradeLinkVersion && <BetterTradeLink version={betterTradeLinkVersion} />}
             </BottomGrouping>
           </CardBody>
         </Wrapper>

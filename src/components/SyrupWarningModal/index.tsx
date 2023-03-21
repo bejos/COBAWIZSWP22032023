@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text } from '@wizswap-libs/uikit'
 import { AlertTriangle } from 'react-feather'
 import { TYPE } from '../Shared'
 import Modal from '../Modal'
@@ -15,7 +15,7 @@ const WarningContainer = styled.div`
   padding: 1rem;
   background: rgba(242, 150, 2, 0.05);
   border: 1px solid #f3841e;
-  border-radius: 20px;
+  border-radius: 16px;
   overflow: auto;
 `
 

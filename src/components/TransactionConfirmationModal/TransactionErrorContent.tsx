@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { ThemeContext } from 'styled-components'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text } from '@wizswap-libs/uikit'
 import { AlertTriangle } from 'react-feather'
 import { AutoColumn } from '../Column'
 import { Wrapper, Section, BottomSection, ContentHeader } from './helpers'
@@ -21,7 +21,7 @@ const TransactionErrorContent = ({ message, onDismiss }: TransactionErrorContent
         </AutoColumn>
       </Section>
       <BottomSection gap="12px">
-        <Button onClick={onDismiss}>Dismiss</Button>
+        <Button fullWidth onClick={onDismiss}>Dismiss</Button>
       </BottomSection>
     </Wrapper>
   )

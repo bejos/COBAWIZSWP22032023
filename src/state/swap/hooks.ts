@@ -1,11 +1,9 @@
 import { parseUnits } from '@ethersproject/units'
-import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@pancakeswap-libs/sdk'
+import { Currency, CurrencyAmount, ETHER, JSBI, Token, TokenAmount, Trade } from '@wizswap-libs/sdk'
 import { ParsedQs } from 'qs'
 import { useCallback, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import useToggledVersion, { Version } from '../../hooks/useToggledVersion'
 import useENS from '../../hooks/useENS'
-import { useV1Trade } from '../../data/V1'
 import { useActiveWeb3React } from '../../hooks'
 import { useCurrency } from '../../hooks/Tokens'
 import { useTradeExactIn, useTradeExactOut } from '../../hooks/Trades'
@@ -92,6 +90,10 @@ const BAD_RECIPIENT_ADDRESSES: string[] = [
   '0xBCfCcbde45cE874adCB698cC183deBcF17952812', // v2 factory
   '0xf164fC0Ec4E93095b804a4795bBe1e041497b92a', // v2 router 01
   '0x05fF2B0DB69458A0750badebc4f9e13aDd608C7F', // v2 router 02
+  '0x10ed43c718714eb63d5aa57b78b54704e256024e', // v2-2 router 02
+  '0xca143ce32fe78f1f7019d7d551a6402fc5350c73', // v2-2 factory
+  '0xb56633e44d36257A2F17292De2EEe5231A66C4cf', // wiz factory
+  '0x832A621ebf4Ab926ed9b3a1C91E6ff13f5a2Df5c', // wiz router
 ]
 
 /**
@@ -113,11 +115,8 @@ export function useDerivedSwapInfo(): {
   parsedAmount: CurrencyAmount | undefined
   v2Trade: Trade | undefined
   inputError?: string
-  v1Trade: Trade | undefined
 } {
   const { account } = useActiveWeb3React()
-
-  const toggledVersion = useToggledVersion()
 
   const {
     independentField,
@@ -155,9 +154,6 @@ export function useDerivedSwapInfo(): {
     [Field.OUTPUT]: outputCurrency ?? undefined,
   }
 
-  // get link to trade on v1, if a better rate exists
-  const v1Trade = useV1Trade(isExactIn, currencies[Field.INPUT], currencies[Field.OUTPUT], parsedAmount)
-
   let inputError: string | undefined
   if (!account) {
     inputError = 'Connect Wallet'
@@ -186,19 +182,10 @@ export function useDerivedSwapInfo(): {
 
   const slippageAdjustedAmounts = v2Trade && allowedSlippage && computeSlippageAdjustedAmounts(v2Trade, allowedSlippage)
 
-  const slippageAdjustedAmountsV1 =
-    v1Trade && allowedSlippage && computeSlippageAdjustedAmounts(v1Trade, allowedSlippage)
-
   // compare input balance to max input based on version
   const [balanceIn, amountIn] = [
     currencyBalances[Field.INPUT],
-    toggledVersion === Version.v1
-      ? slippageAdjustedAmountsV1
-        ? slippageAdjustedAmountsV1[Field.INPUT]
-        : null
-      : slippageAdjustedAmounts
-      ? slippageAdjustedAmounts[Field.INPUT]
-      : null,
+    slippageAdjustedAmounts ? slippageAdjustedAmounts[Field.INPUT] : null,
   ]
 
   if (balanceIn && amountIn && balanceIn.lessThan(amountIn)) {
@@ -211,7 +198,6 @@ export function useDerivedSwapInfo(): {
     parsedAmount,
     v2Trade: v2Trade ?? undefined,
     inputError,
-    v1Trade,
   }
 }
 

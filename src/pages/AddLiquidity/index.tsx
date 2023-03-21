@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { BigNumber } from '@ethersproject/bignumber'
 import { TransactionResponse } from '@ethersproject/providers'
-import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@pancakeswap-libs/sdk'
-import { Button, CardBody, AddIcon, Text as UIKitText } from '@pancakeswap-libs/uikit'
+import { Currency, currencyEquals, ETHER, TokenAmount, WETH } from '@wizswap-libs/sdk'
+import { Button, CardBody, AddIcon, Text as UIKitText } from '@wizswap-libs/uikit'
 import { RouteComponentProps } from 'react-router-dom'
 import { LightCard } from 'components/Card'
 import { AutoColumn, ColumnCenter } from 'components/Column'
@@ -433,7 +433,7 @@ export default function AddLiquidity({
         </Wrapper>
       </AppBody>
       {pair && !noLiquidity && pairState !== PairState.INVALID ? (
-        <AutoColumn style={{ minWidth: '20rem', marginTop: '1rem' }}>
+        <AutoColumn style={{ maxWidth: '436px', width: '100%', marginTop: '1rem' }}>
           <MinimalPositionCard showUnwrapped={oneCurrencyIsWETH} pair={pair} />
         </AutoColumn>
       ) : null}

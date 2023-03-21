@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { ButtonMenu, ButtonMenuItem } from '@pancakeswap-libs/uikit'
+import { ButtonMenu, ButtonMenuItem } from '@wizswap-libs/uikit'
 import { darken } from 'polished'
 import { NavLink, Link as HistoryLink } from 'react-router-dom'
 import { ArrowLeft } from 'react-feather'
@@ -88,7 +88,7 @@ export function SwapPoolTabs({ active }: { active: 'swap' | 'pool' }) {
       <StyledNavLink id="pool-nav-link" to="/pool" isActive={() => active === 'pool'}>
         <TranslatedText translationId={74}>Pool</TranslatedText>
       </StyledNavLink>
-      <StyledAbsoluteLink id="pool-nav-link" target="_blank" href="https://www.binance.org/en/panama">
+      <StyledAbsoluteLink id="pool-nav-link" href="#">
         Bridge
       </StyledAbsoluteLink>
     </Tabs>
@@ -106,7 +106,7 @@ export const Nav = ({ activeIndex = 0 }: { activeIndex?: number }) => (
     <ButtonMenuItem
       id="pool-nav-link"
       as="a"
-      href="https://www.binance.org/en/panama"
+      href="https://arbitrum.wizardbridge.com"
       target="_blank"
       rel="noreferrer noopener"
     >

@@ -2,12 +2,10 @@ import React, { memo, useCallback, useMemo, useRef, useState } from 'react'
 import { ArrowLeft } from 'react-feather'
 import { usePopper } from 'react-popper'
 import { useDispatch, useSelector } from 'react-redux'
-import { Button, Text } from '@pancakeswap-libs/uikit'
+import { Button, Text, ChevronDownIcon } from '@wizswap-libs/uikit'
 import styled from 'styled-components'
-import { ReactComponent as DropDown } from '../../assets/images/dropdown.svg'
 import { useFetchListCallback } from '../../hooks/useFetchListCallback'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
-
 import useToggle from '../../hooks/useToggle'
 import { AppDispatch, AppState } from '../../state'
 import { acceptListUpdate, removeList, selectList } from '../../state/lists/actions'
@@ -162,7 +160,7 @@ const ListRow = memo(function ListRow({ listUrl, onBack }: { listUrl: string; on
             onClick={toggle}
             variant="secondary"
           >
-            <DropDown />
+            <ChevronDownIcon />
           </Button>
         </div>
 
@@ -286,7 +284,7 @@ export function ListSelect({ onDismiss, onBack }: { onDismiss: () => void; onBac
       <PaddedColumn gap="14px">
         <Text bold>
           Add a list{' '}
-          <QuestionHelper text="Token lists are an open specification for lists of BEP20 tokens. You can use any token list by entering its URL below. Beware that third party token lists can contain fake or malicious BEP20 tokens." />
+          <QuestionHelper text="Token lists are an open specification for lists of ERC20 tokens. You can use any token list by entering its URL below. Beware that third party token lists can contain fake or malicious ERC20 tokens." />
         </Text>
         <Row>
           <SearchInput

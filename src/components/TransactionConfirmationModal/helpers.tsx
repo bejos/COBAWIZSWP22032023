@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react'
 import styled from 'styled-components'
-import { Heading, IconButton, CloseIcon } from '@pancakeswap-libs/uikit'
+import { Heading, IconButton, CloseIcon } from '@wizswap-libs/uikit'
 import { AutoColumn, ColumnCenter } from '../Column'
 
 
@@ -17,7 +17,7 @@ export const ConfirmedIcon = styled(ColumnCenter)`
 `
 
 export const BottomSection = styled(Section)`
-  background-color: ${({ theme }) => theme.colors.invertedContrast};
+  background-color: ${({ theme }) => theme.colors.card};
   border-bottom-left-radius: 20px;
   border-bottom-right-radius: 20px;
 `

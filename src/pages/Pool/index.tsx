@@ -1,12 +1,11 @@
 import React, { useContext, useMemo } from 'react'
 import { ThemeContext } from 'styled-components'
-import { Pair } from '@pancakeswap-libs/sdk'
-import { Button, CardBody, Text } from '@pancakeswap-libs/uikit'
+import { Pair } from '@wizswap-libs/sdk'
+import { Button, CardBody, Text } from '@wizswap-libs/uikit'
 import { Link } from 'react-router-dom'
 import CardNav from 'components/CardNav'
 import Question from 'components/QuestionHelper'
 import FullPositionCard from 'components/PositionCard'
-import { useUserHasLiquidityInAllTokens } from 'data/V1'
 import { useTokenBalancesWithLoadingIndicator } from 'state/wallet/hooks'
 import { StyledInternalLink, TYPE } from 'components/Shared'
 import { LightCard } from 'components/Card'
@@ -57,13 +56,11 @@ export default function Pool() {
 
   const allV2PairsWithLiquidity = v2Pairs.map(([, pair]) => pair).filter((v2Pair): v2Pair is Pair => Boolean(v2Pair))
 
-  const hasV1Liquidity = useUserHasLiquidityInAllTokens()
-
   return (
     <>
       <CardNav activeIndex={1} />
       <AppBody>
-        <PageHeader title="Liquidity" description="Add liquidity to receive LP tokens">
+        <PageHeader title="Liquidity" description="Add liquidity to receive WIZ-LP tokens">
           <Button id="join-pool-button" as={Link} to="/add/ETH">
             <TranslatedText translationId={100}>Add Liquidity</TranslatedText>
           </Button>
@@ -111,15 +108,13 @@ export default function Pool() {
 
               <div>
                 <Text fontSize="14px" style={{ padding: '.5rem 0 .5rem 0' }}>
-                  {hasV1Liquidity
-                    ? 'Uniswap V1 liquidity found!'
-                    : TranslateString(106, "Don't see a pool you joined?")}{' '}
-                  <StyledInternalLink id="import-pool-link" to={hasV1Liquidity ? '/migrate/v1' : '/find'}>
-                    {hasV1Liquidity ? 'Migrate now.' : TranslateString(108, 'Import it.')}
+                  {TranslateString(106, "Don't see a pool you joined?")}{' '}
+                  <StyledInternalLink id="import-pool-link" to="/find">
+                    {TranslateString(108, 'Import it.')}
                   </StyledInternalLink>
                 </Text>
                 <Text fontSize="14px" style={{ padding: '.5rem 0 .5rem 0' }}>
-                  Or, if you staked your LP tokens in a farm, unstake them to see them here.
+                  Or, if you staked your WIZ-LP tokens in a farm, unstake them to see them here.
                 </Text>
               </div>
             </AutoColumn>

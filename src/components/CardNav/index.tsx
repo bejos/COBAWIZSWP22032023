@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-import { ButtonMenu, ButtonMenuItem } from '@pancakeswap-libs/uikit'
+import { ButtonMenu, ButtonMenuItem } from '@wizswap-libs/uikit'
 import TranslatedText from '../TranslatedText'
 
 const StyledNav = styled.div`
@@ -20,8 +20,7 @@ const Nav = ({ activeIndex = 0 }: { activeIndex?: number }) => (
       <ButtonMenuItem
         id="pool-nav-link"
         as="a"
-        href="https://www.binance.org/en/panama"
-        target="_blank"
+        href="https://arbitrum.wizardbridge.com"
         rel="noreferrer noopener"
       >
         Bridge
