@@ -6,6 +6,7 @@ import { LanguageContext } from 'hooks/LanguageContext'
 import useTheme from 'hooks/useTheme'
 import { injected, walletconnect } from 'connectors'
 import { usePairContract } from 'hooks/useContract'
+import links, { socials } from './config'
 
 const Menu: React.FC = (props) => {
   const { account, activate, deactivate } = useWeb3React()
@@ -32,6 +33,7 @@ const Menu: React.FC = (props) => {
   return (
     <UikitMenu
       links={links}
+      socials={socials}
       account={account as string}
       login={(connectorId: ConnectorId) => {
         if (connectorId === 'walletconnect') {
