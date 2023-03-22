@@ -18,7 +18,7 @@ export function isAddress(value: any): string | false {
 }
 
 const ETHSCAN_PREFIXES: { [chainId in ChainId]: string } = {
-  56: 'scan.',
+  4949: 'scan.',
   97: 'testnet.'
 }
 
