@@ -1,4 +1,4 @@
-import { Currency, ETHER, Token } from '@wizswap-libs/sdk'
+import { Currency, ETHER, Token } from '@dexcoreswap-libs/sdk'
 
 export function currencyId(currency: Currency): string {
   if (currency === ETHER) return 'ETH'

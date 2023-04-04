@@ -1,4 +1,4 @@
-import { Currency } from '@wizswap-libs/sdk'
+import { Currency } from '@dexcoreswap-libs/sdk'
 import React, { useCallback, useEffect, useState } from 'react'
 import useLast from '../../hooks/useLast'
 import { useSelectedListUrl } from '../../state/lists/hooks'
