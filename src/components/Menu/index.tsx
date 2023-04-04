@@ -33,7 +33,6 @@ const Menu: React.FC = (props) => {
   return (
     <UikitMenu
       links={links}
-      socials={socials}
       account={account as string}
       login={(connectorId: ConnectorId) => {
         if (connectorId === 'walletconnect') {
