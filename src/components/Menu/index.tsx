@@ -48,7 +48,7 @@ const Menu: React.FC = (props) => {
       langs={allLanguages}
       setLang={setSelectedLanguage}
       cakePriceUsd={price}
-      cakePriceLink="https://dexscreener.com/arbitrum/0xe70b3b01f4f53d8c340e4120450da40c8b27f8b5"
+      /// cakePriceLink="https://dexscreener.com/arbitrum/0xe70b3b01f4f53d8c340e4120450da40c8b27f8b5"
       // removeNav
       {...props}
     />
